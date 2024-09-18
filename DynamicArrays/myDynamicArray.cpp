@@ -1,6 +1,6 @@
 #include "myDynamicArray.h"
 
-namespace Ali {
+namespace mystd {
 
 myDynamicArray::myDynamicArray(int capacity_) {
   if (capacity_ < 1) {
@@ -47,10 +47,14 @@ void myDynamicArray::Push(int value) {
 }
 
 void myDynamicArray::ResizeArray(int new_size) {
-  if (new_size == capacity_) {
-    IncreaseSize();
-  } else if (new_size < capacity_) {
-    DecreaseSize();
+  if (size_ < new_size) {  // grow
+    if (size_ == capacity_) {
+      IncreaseSize();
+    }
+  } else if (size_ > new_size) {  // shrink
+    if (size_ < capacity_ / KShrinkFactor) {
+      DecreaseSize();
+    }
   }
 }
 
@@ -90,13 +94,13 @@ int myDynamicArray::GetValueAt(int index) const {
   return data_[index];
 }
 
-int myDynamicArray::pop() {
+int myDynamicArray::Pop() {
   if (size_ == 0) {
-    std::cout << "No Values to be Poped" << "\n";
+    std::cout << "No Values to be Popped" << "\n";
     exit(EXIT_FAILURE);
   }
-  int value = data_[size_ - 1];
   ResizeArray(size_ - 1);
+  int value = data_[size_ - 1];
   size_--;
   return value;
 }
@@ -138,7 +142,7 @@ void myDynamicArray::Remove(int value) {
     }
   }
 }
-int myDynamicArray::find(int value) {
+int myDynamicArray::Find(int value) {
   for (int i = 0; i < size_; i++) {
     if (data_[i] == value) {
       return i;
@@ -146,4 +150,4 @@ int myDynamicArray::find(int value) {
   }
   return -1;
 }
-}  // namespace Ali
+}  // namespace mystd

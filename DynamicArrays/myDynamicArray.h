@@ -4,15 +4,15 @@
 #include <iostream>
 #include <memory>
 
-namespace Ali {
-static const int KMinCapacity = 8;
+namespace mystd {
+static const int KMinCapacity = 16;
 static const int KGrowthFactor = 2;
 static const int KShrinkFactor = 4;
 
 class myDynamicArray {
  private:
   // current capacity of the array
-  int capacity_{MinCapacity};
+  int capacity_{KMinCapacity};
   // current number of items in the array
   int size_{0};
   // pointer to the array items
@@ -26,7 +26,7 @@ class myDynamicArray {
  public:
   myDynamicArray(int capacity);                           // Constructor
   ~myDynamicArray();                                      // Destructor
-  myDynamicArray(const myDynamicArray &other) = default;  // Copy Constructor
+  myDynamicArray(const myDynamicArray& other) = default;  // Copy Constructor
 
   int GetSize() const;
   int GetCapacity() const;
@@ -34,13 +34,13 @@ class myDynamicArray {
   void PrintArray() const;
   void Push(int value);
   int GetValueAt(int index) const;
-  int pop();
+  int Pop();
   void Insert(int index, int value);
   void Prepend(int value);
   void Delete(int index);
   void Remove(int value);
-  int find(int value);
+  int Find(int value);
 };
 
-}  // namespace Ali
+}  // namespace mystd
 #endif  // MY_DYNAMIC_ARRAYS_PROJECT
