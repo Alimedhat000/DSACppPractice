@@ -6,53 +6,50 @@
 
 namespace mystd {
 
-  class Node {
-  public:
-    Node(int value) : data_{ value }, next_{ nullptr } {};
-    ~Node() {};
-    // Disallow copy constructor aka
-    // Node elem1;
-    // Node elem2 = elem1;
-    Node(const Node&) = delete;
-    // Allows copy assignment
-    // Node elem1;
-    // Node elem2;
-    // elem2 = elem1;
-    Node& operator=(const Node&) = default;
+template <typename T>
+class Node {
+ public:
+  Node(T value) : data_{value}, next_{nullptr} {};
+  ~Node() {};
 
-    int GetData() const { return data_; }
-    void SetData(int value) { data_ = value; }
-    Node* GetNext() const { return next_; }
-    void SetNext(Node* node) { next_ = node; }
+  Node(const Node&) = delete;
+  Node& operator=(const Node&) = default;
 
-  private:
-    int data_;
-    Node* next_;
-  };
+  T GetData() const { return data_; }
+  void SetData(T value) { data_ = value; }
+  Node* GetNext() const { return next_; }
+  void SetNext(Node* node) { next_ = node; }
 
-  class myLinkedList {
-  public:
-    explicit myLinkedList();
-    ~myLinkedList();
-    myLinkedList(const myLinkedList&) = delete;
-    myLinkedList& operator=(const myLinkedList&) = default;
+ private:
+  T data_;
+  Node* next_;
+};
 
-    int GetSize() const;
-    void PushFront(int value);
-    bool IsEmpty() const;
-    int GetValueAt(int index) const;
-    void PushBack(int value);
-    void PrintList() const;
-    int PopFront();
-    int PopBack();
-    void insert(int index, int value);
-    void DeleteNode(int index);
-    void RemoveValue(int value);
+template <typename T>
+class myLinkedList {
+ public:
+  explicit myLinkedList() : Head_(nullptr), size_(0) {};
+  ~myLinkedList();
+  myLinkedList(const myLinkedList&) = delete;
+  myLinkedList& operator=(const myLinkedList&) = default;
 
-  private:
-    Node* Head_;
-    int size_{ 0 };
-  };
+  int GetSize() const;
+  void PushFront(T value);
+  bool IsEmpty() const;
+  T GetValueAt(int index) const;
+  void PushBack(T value);
+  void PrintList() const;
+  T PopFront();
+  T PopBack();
+  void insert(int index, T value);
+  void DeleteNode(int index);
+  void RemoveValue(T value);
+
+ private:
+  Node<T>* Head_;
+  int size_{0};
+};
+
 }  // namespace mystd
 
-#endif  // !MY_LINKED_LIST_PROJECT
+#endif  // MY_LINKED_LIST_PROJECT

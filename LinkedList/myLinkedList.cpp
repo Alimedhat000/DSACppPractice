@@ -1,9 +1,11 @@
 #include "myLinkedList.h"
 
 namespace mystd {
-myLinkedList::~myLinkedList() {
-  Node* Current = Head_;
-  Node* Next = nullptr;
+
+template <typename T>
+myLinkedList<T>::~myLinkedList() {
+  Node<T>* Current = Head_;
+  Node<T>* Next = nullptr;
 
   while (Current) {
     Next = Current->GetNext();
@@ -12,20 +14,28 @@ myLinkedList::~myLinkedList() {
   }
 }
 
-int myLinkedList::GetSize() const { return size_; }
+template <typename T>
+int myLinkedList<T>::GetSize() const {
+  return size_;
+}
 
-void myLinkedList::PushFront(int value) {
-  Node* NewNode = new Node(value);
+template <typename T>
+void myLinkedList<T>::PushFront(T value) {
+  Node<T>* NewNode = new Node<T>(value);
 
   NewNode->SetNext(Head_);
   Head_ = NewNode;
   size_++;
 }
 
-bool myLinkedList::IsEmpty() const { return Head_ == nullptr; }
+template <typename T>
+bool myLinkedList<T>::IsEmpty() const {
+  return Head_ == nullptr;
+}
 
-int myLinkedList::GetValueAt(int index) const {
-  Node* TempNode = Head_;
+template <typename T>
+T myLinkedList<T>::GetValueAt(int index) const {
+  Node<T>* TempNode = Head_;
   for (int i = 0; i < index && TempNode != nullptr; i++) {
     TempNode = TempNode->GetNext();
   }
@@ -37,13 +47,14 @@ int myLinkedList::GetValueAt(int index) const {
   return TempNode->GetData();
 }
 
-void myLinkedList::PushBack(int value) {
-  Node* NewNode = new Node(value);
+template <typename T>
+void myLinkedList<T>::PushBack(T value) {
+  Node<T>* NewNode = new Node<T>(value);
   if (Head_ == nullptr) {
     Head_ = NewNode;
 
   } else {
-    Node* TempNode = Head_;
+    Node<T>* TempNode = Head_;
     while (TempNode->GetNext()) {
       TempNode = TempNode->GetNext();
     }
@@ -52,8 +63,9 @@ void myLinkedList::PushBack(int value) {
   }
 }
 
-void myLinkedList::PrintList() const {
-  Node* TempNode = Head_;
+template <typename T>
+void myLinkedList<T>::PrintList() const {
+  Node<T>* TempNode = Head_;
   if (!TempNode) {
     std::cout << "Empty List \n";
     return;
@@ -67,36 +79,38 @@ void myLinkedList::PrintList() const {
   std::cout << "\n";
 }
 
-int myLinkedList::PopFront() {
+template <typename T>
+T myLinkedList<T>::PopFront() {
   if (!Head_) {
     std::cout << "List is Empty \n";
-    return -1;
+    return T();  // Return default value of T
   }
-  Node* TempNode = Head_;
-  int value = TempNode->GetData();
+  Node<T>* TempNode = Head_;
+  T value = TempNode->GetData();
   Head_ = Head_->GetNext();
   delete TempNode;
   size_--;
   return value;
 }
 
-int myLinkedList::PopBack() {
+template <typename T>
+T myLinkedList<T>::PopBack() {
   if (!Head_) {
     std::cout << "List is Empty \n";
-    return -1;
+    return T();  // Return default value of T
   }
-  Node* CurNode = Head_;
-  Node* PrevNode = nullptr;
+  Node<T>* CurNode = Head_;
+  Node<T>* PrevNode = nullptr;
   while (CurNode->GetNext()) {
     PrevNode = CurNode;
     CurNode = CurNode->GetNext();
   }
 
-  int value = CurNode->GetData();
+  T value = CurNode->GetData();
 
   if (PrevNode) {
     PrevNode->SetNext(
-        nullptr);  // Ensure that the lists ends here with no dangling pointers
+        nullptr);  // Ensure that the list ends here with no dangling pointers
   } else {
     Head_ = nullptr;  // if only one element is in the List
   }
@@ -106,7 +120,8 @@ int myLinkedList::PopBack() {
   return value;
 }
 
-void myLinkedList::insert(int index, int value) {
+template <typename T>
+void myLinkedList<T>::insert(int index, T value) {
   if (index >= size_) {
     PushBack(value);
     return;
@@ -116,15 +131,15 @@ void myLinkedList::insert(int index, int value) {
     return;
   }
 
-  Node* CurNode = Head_;
-  Node* PrevNode = nullptr;
+  Node<T>* CurNode = Head_;
+  Node<T>* PrevNode = nullptr;
   int i{0};
   for (i; i < index && CurNode; i++) {
     PrevNode = CurNode;
     CurNode = CurNode->GetNext();
   }
 
-  Node* NewNode = new Node(value);
+  Node<T>* NewNode = new Node<T>(value);
 
   if (PrevNode) {
     NewNode->SetNext(CurNode);
@@ -133,7 +148,8 @@ void myLinkedList::insert(int index, int value) {
   size_++;
 }
 
-void myLinkedList::DeleteNode(int index) {
+template <typename T>
+void myLinkedList<T>::DeleteNode(int index) {
   if (IsEmpty()) {
     std::cout << "The List is Empty, Can't Delete\n";
     return;
@@ -144,10 +160,9 @@ void myLinkedList::DeleteNode(int index) {
     return;
   }
 
-  Node* CurNode = Head_;
-  Node* PrevNode = nullptr;
+  Node<T>* CurNode = Head_;
+  Node<T>* PrevNode = nullptr;
 
-  // If deleting the first node (index = 0)
   if (index == 0) {
     Head_ = Head_->GetNext();
     delete CurNode;
@@ -155,7 +170,6 @@ void myLinkedList::DeleteNode(int index) {
     return;
   }
 
-  // Traverse to the node at position 'index'
   for (int i = 0; i < index && CurNode; i++) {
     PrevNode = CurNode;
     CurNode = CurNode->GetNext();
@@ -166,14 +180,15 @@ void myLinkedList::DeleteNode(int index) {
     return;
   }
 
-  PrevNode->SetNext(CurNode->GetNext());  // Disconnect the node
-  delete CurNode;                         // Free the memory
+  PrevNode->SetNext(CurNode->GetNext());
+  delete CurNode;
   size_--;
 }
 
-void myLinkedList::RemoveValue(int value) {
-  Node* CurNode = Head_;
-  Node* PrevNode = nullptr;
+template <typename T>
+void myLinkedList<T>::RemoveValue(T value) {
+  Node<T>* CurNode = Head_;
+  Node<T>* PrevNode = nullptr;
 
   while (CurNode) {
     if (CurNode->GetData() == value) {
