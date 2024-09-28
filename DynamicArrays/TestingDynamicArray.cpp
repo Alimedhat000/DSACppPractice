@@ -18,7 +18,7 @@ void myDynamicArrayTester::RunAllTests() {
 void myDynamicArrayTester::TestSize() const {
   mystd::myDynamicArray vector(3);
   assert(vector.GetSize() == 0);
-  s int items_to_add = 5;
+  int items_to_add = 5;
   for (int i = 0; i < items_to_add; ++i) {
     vector.Push(i + 1);
   }
